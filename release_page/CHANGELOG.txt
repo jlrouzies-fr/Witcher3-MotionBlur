@@ -1,0 +1,2 @@
+0.1.1 - Fix: no blur with Windows HDR on (the game uses a 10-bit colour buffer there); also accepts the game's other colour formats, logs unsupported ones.
+0.1.0 - First release: per-pixel motion blur from the game's DLSS motion vectors (characters, creatures and camera), shutter / max length / quality settings in the ReShade overlay.

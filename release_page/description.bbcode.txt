@@ -1,0 +1,33 @@
+[center][b][color=#bf9000][size=4]For Remaster 5.0 (DirectX 12)[/size][/color][/b][/center]
+[b][color=#d4d4d8][size=4]Description[/size][/color][/b]
+
+[list]
+[*][color=#D4D4D8]Real per-object motion blur: every pixel blurs along its own motion, so a swinging sword, a galloping horse or a flying crow smears in the direction it moves, while still things stay sharp.[/color][/*]
+[*][color=#D4D4D8]The vanilla motion blur only blurs camera movement. This add-on uses the per-pixel motion vectors the game already computes for DLSS, so characters, creatures and weapons get their own blur too.[/color][/*]
+[*][color=#D4D4D8]Runs inside the render pipeline right after DLSS, before bloom, tonemapping and the UI: the HUD never blurs, and exposure stays the same.[/color][/*]
+[*][color=#D4D4D8]Depth-aware reconstruction filter (tile max / neighbour max / gather): a moving object blurs out over the background behind it, and the background does not smear into objects in front.[/color][/*]
+[*][color=#D4D4D8]No noise, no grain, no flicker: the same input gives the same blur every frame.[/color][/*]
+[*][color=#D4D4D8]Works in gameplay, dialogues and cutscenes.[/color][/*]
+[*][color=#D4D4D8]Settings in the ReShade overlay, Add-ons tab, saved in ReShade.ini:
+ - Shutter: how long the virtual shutter stays open (0.5 = 180 degrees, like film)
+ - Max length: longest blur trail, in 4K pixels
+ - Quality: 12 / 20 / 32 samples
+ - Debug view: shows the motion as colours[/color][/*]
+[/list][color=#D4D4D8]
+[b][size=4]Requirements[/size][/b][/color]
+
+[list]
+[*][color=#d4d4d8]ReShade 6.x [b]with full add-on support[/b] (the same ReShade build RenoDX needs), installed for DirectX 12.[/color][/*]
+[*][color=#d4d4d8][b]DLSS[/b] upscaling (any DLSS quality mode). FSR and native TAA are not supported yet.[/color][/*]
+[*][color=#d4d4d8]Recommended: turn the game's own Motion Blur option off, so camera turns are not blurred twice.[/color][/*]
+[*][color=#d4d4d8]Works with RenoDX, path tracing, HairWorks and Cinematic DOF.[/color][/*]
+[/list][color=#D4D4D8]
+[b][size=4]Installation instructions[/size][/b][/color]
+
+[list]
+[*][color=#d4d4d8]Install this mod zip content folder under your root "GAMEPATH" (ObjectMotionBlur.addon64 goes to bin\x64_dx12, next to ReShade)[/color][/*]
+[*][color=#d4d4d8]To uninstall, delete bin\x64_dx12\ObjectMotionBlur.addon64[/color][/*]
+[/list][color=#D4D4D8]
+[b]Support me if you like![/b]
+
+[url=https://ko-fi.com/Y8Y61C8124][img width=180.6,height=44.2]https://storage.ko-fi.com/cdn/kofi1.png?v=6[/img][/url][/color]
