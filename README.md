@@ -9,7 +9,7 @@ Requirements: ReShade 6.x with full add-on support, DirectX 12, DLSS upscaling. 
 ## Build
 1. Visual Studio 2022+ Build Tools (MSVC, x64) and the Windows SDK `dxc.exe`.
 2. Edit the `vcvars64.bat` and `dxc.exe` paths at the top of `build.bat`.
-3. Run `build.bat` -> `out\ObjectMotionBlur.addon64`; copy it next to ReShade in `bind_dx12`.
+3. Run `build.bat` -> `out\ObjectMotionBlur.addon64`; copy it next to ReShade in `bin\x64_dx12`.
 
 ReShade add-on (DirectX 12) for The Witcher 3 Remastered 5.0: per-pixel motion blur from the game's DLSS motion vectors.
 
