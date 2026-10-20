@@ -24,21 +24,21 @@ ReShade add-on (DirectX 12) for The Witcher 3 Remastered 5.0: per-pixel motion b
    The game runs it once (its own motion blur option off) or twice (on).
 2. The MV texture and the depth (r32_g8_typeless) are copied into the add-on's own textures at the next
    draw / dispatch / copy, or when the MV leaves UAV state (the game reuses that memory after DLSS).
-3. The game copies the upscaled output into its post-process texture (same size and format on both sides,
-   larger than the render resolution). The add-on replaces that copy with its blur passes.
-   Accepted formats: r16g16b16a16_float (RenoDX / SDR), r10g10b10a2_unorm (Windows HDR), r11g11b10_float, r8g8b8a8_unorm.
+3. When the DLSS output leaves UAV state (DLSS done, before any post-process or UI pass reads it), it is copied to a
+   scratch texture and the blur passes write the result back into the DLSS output in place.
+   Accepted formats: r16g16b16a16_float (seen in SDR and HDR), r11g11b10_float, r10g10b10a2_unorm, r8g8b8a8_unorm.
 4. The game's compute state (pipeline, root signature, tables, root CBVs, constants) is rebound afterwards.
    If the command list has no compute tables, a game descriptor table seen earlier is bound once to switch the
    shader-visible heap back.
 
 ## Log: bin\x64_dx12\ObjectMotionBlur.log
-- `post-DLSS copy found: ...` - injection point found (format of the upscaled image shown as fNN = reshade::api::format).
+- `DLSS output found: ...` - injection point found (format shown as fNN = reshade::api::format).
 - `first blurred frame` / `frames with blur so far: N` - working.
 - `blur skipped (n): <reason>` - first 20, then every 1000th:
-  - `post-DLSS copy without this frame's motion vectors / depth` - normal on loading screens; constant = MV / depth not found.
+  - `DLSS output without this frame's depth` - normal on loading screens; constant = depth not found.
   - `no game descriptor table seen yet (heap restore)` - the command list state could not be restored safely.
-  - `target without UAV or source without SRV usage` - the post-process texture cannot be written by compute.
-- `skipped upscaled copy (unsupported format): ...` - a candidate copy in a format not handled yet.
+  - `DLSS output without UAV usage` - the DLSS output cannot be written by compute.
+- `skipped upscaled UAV texture (unsupported format): ...` - a candidate DLSS output in a format not handled yet.
 
 ## Diagnostics (environment variables, set before starting the game)
 - `MB_TRACE_FRAMES=700` (comma list) - dumps every barrier / draw / dispatch / copy of those frames into the log.
