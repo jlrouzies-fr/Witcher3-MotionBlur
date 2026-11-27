@@ -7,8 +7,9 @@
 // constant buffer), so "objects only" removes it and keeps the true per-object motion.
 //
 // Reconstruction filter after McGuire et al. 2012 / Jimenez 2014: tile max -> 3x3 neighbour max -> depth-aware gather
-// along the dominant neighbourhood velocity. Normalised weights in linear HDR (exposure unchanged), no jitter (no grain,
-// nothing for the eye to see flicker frame to frame).
+// along the dominant neighbourhood velocity. Normalised weights in linear HDR (exposure unchanged). The samples of each
+// pixel are offset by a fixed screen-space fraction of the sample step (interleaved gradient noise, the same every frame:
+// no flicker): without it, thin bright lines (hair strands) are copied at every sample step into evenly spaced dashes.
 
 struct Params
 {
@@ -21,7 +22,7 @@ struct Params
     float tile;         // tile size, MV px
     float samples;      // gather samples
     float debug;        // 1 = output the blur vectors as colours
-    float pad;
+    float jitter;       // 1 = offset each pixel's samples by a fixed per-pixel fraction of the sample step
     float4 unused[5];
 };
 cbuffer Push : register(b0) { Params P; }
@@ -155,9 +156,10 @@ void Gather(uint3 id : SV_DispatchThreadID)
     float3 acc = c0.rgb * wc;
     float tot = wc;
     int n = (int)P.samples;
+    float jit = P.jitter > 0.5 ? frac(52.9829189 * frac(dot(float2(p), float2(0.06711056, 0.00583715)))) : 0.5;
     [loop] for (int j = 0; j < n; ++j)
     {
-        float t = lerp(-0.5, 0.5, (j + 0.5) / n);
+        float t = lerp(-0.5, 0.5, (j + jit) / n);
         float2 o = vn * t;
         float dist = length(o);
         int2 sp = clamp(int2(float2(p) + o + 0.5), int2(0, 0), int2(P.outSize) - 1);
